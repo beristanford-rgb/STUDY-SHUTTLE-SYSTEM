@@ -42,6 +42,11 @@ class LoginIn(BaseModel):
     username: str
     password: str
 
+class StudentIn(BaseModel):
+    name: str = Field(min_length=2)
+    program: str = Field(min_length=2)
+    semester: int = Field(ge=1)
+
 class TaskIn(BaseModel):
     student_id:int; subject_id:int; task_name:str=Field(min_length=2); deadline:str=''; priority:str='Medium'; status:str='Pending'
 class SessionIn(BaseModel):
@@ -64,6 +69,13 @@ def dashboard():
     return {'students':rows('SELECT COUNT(*) n FROM student')[0]['n'],'subjects':rows('SELECT COUNT(*) n FROM subject')[0]['n'],'tasks':rows('SELECT COUNT(*) n FROM study_task')[0]['n'],'sessions':rows('SELECT COUNT(*) n FROM study_session')[0]['n'],'pending':rows("SELECT COUNT(*) n FROM study_task WHERE status!='Completed'")[0]['n'],'recent':rows('SELECT ss.session_date, s.name student, sub.subject_name subject, ss.duration_minutes, ss.productivity FROM study_session ss JOIN student s USING(student_id) JOIN subject sub USING(subject_id) ORDER BY ss.session_id DESC LIMIT 5')}
 @app.get('/api/students')
 def students(): return rows('SELECT * FROM student ORDER BY student_id')
+@app.post('/api/students')
+def add_student(x: StudentIn):
+    with closing(connect()) as c:
+        cur = c.execute('INSERT INTO student(name,program,semester) VALUES(?,?,?)', (x.name.strip(), x.program.strip(), x.semester))
+        c.commit()
+        return {'message': 'Student added', 'student_id': cur.lastrowid}
+
 @app.get('/api/subjects')
 def subjects(): return rows('SELECT * FROM subject ORDER BY subject_id')
 @app.get('/api/tasks')
