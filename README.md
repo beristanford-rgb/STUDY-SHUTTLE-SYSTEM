@@ -1,6 +1,6 @@
 # Study Shuttle System
 
-A simple student study-progress app with fictional student records, study tasks, study sessions, and academic performance summaries.
+A student self-service study tracker with fictional demo records.
 
 ## Technology
 
@@ -10,9 +10,9 @@ A simple student study-progress app with fictional student records, study tasks,
 
 ## Run on Windows
 
-Install Python, Node.js, and Git. Open two PowerShell windows in this project folder.
+Install Python and Node.js, then open two PowerShell windows in the project folder.
 
-### Window 1: backend
+### Backend window
 
 ```powershell
 cd backend
@@ -21,7 +21,7 @@ python -m venv .venv
 .\.venv\Scripts\python.exe -m uvicorn main:app --reload
 ```
 
-### Window 2: frontend
+### Frontend window
 
 ```powershell
 cd frontend
@@ -31,22 +31,23 @@ npm.cmd run dev
 
 Open the local address Vite prints, usually http://localhost:5173. The API reference is at http://127.0.0.1:8000/docs.
 
-## Sign-in for classroom presentation
+## Demo student accounts
 
-Username: `user1`
+- Username `user1`, password `user1@12345` (Alice Johnson)
+- Username `student2`, password `study123` (Ethan Miller)
+- Username `student3`, password `study123` (Olivia Davis)
 
-Password: `user1@12345`
+Other existing fictional students receive `student<ID>` usernames with the same demo password. New students can create their own account from the sign-in page.
 
-This is a local presentation sign-in only. Do not use it to protect real or private information.
+## Student workflow
 
-## Presentation walkthrough
+1. Sign in or create a student account.
+2. Browse subjects and enroll in one or more.
+3. Create tasks for an enrolled subject and update task status.
+4. Log study sessions for enrolled subjects.
+5. Record study difficulties and stress check-ins.
+6. View personal performance and study summaries in Progress.
 
-1. Sign in and show the Overview counts.
-2. Open Students and add a fictional student. It will be selected automatically for the next task or study session.
-3. Open Subjects and add a subject with a unique code. It will be selected automatically for the next task or study session.
-4. Open Tasks and create a task, change its status, then delete it.
-5. Open Study sessions and save a session.
-6. Open Query results and show the populated academic and study summaries.
-7. If asked how the website communicates with the backend, open `/docs` and show the API routes.
+The app scopes tasks, sessions, difficulties, stress records, performance, and summaries to the signed-in student. Demo accounts use fictional records. This classroom sign-in is for local demonstration only, not production security. See `docs/ER-Diagram.md` for the implemented data relationships.
 
-Each person who runs the project has their own local database. The current version is not an online shared site. The sample records are created automatically when the backend first starts. To reset them, stop the backend and delete `backend/study_shuttle.db`; it will be recreated at the next start.
+Each computer keeps its own local database; this is not a shared online site. The database initializes sample records on first run and preserves existing records during schema upgrades.
